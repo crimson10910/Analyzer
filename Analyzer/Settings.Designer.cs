@@ -106,5 +106,41 @@ namespace Analyzer {
                 this["rightContext"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool checkLeft {
+            get {
+                return ((bool)(this["checkLeft"]));
+            }
+            set {
+                this["checkLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool checkRight {
+            get {
+                return ((bool)(this["checkRight"]));
+            }
+            set {
+                this["checkRight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string bigFile {
+            get {
+                return ((string)(this["bigFile"]));
+            }
+            set {
+                this["bigFile"] = value;
+            }
+        }
     }
 }

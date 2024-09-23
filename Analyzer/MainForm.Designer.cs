@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.textBox_Position = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.выбратьФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.открытьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.открытьОтчетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,8 +43,15 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.comboBoxMain = new System.Windows.Forms.ComboBox();
             this.comboBoxWrong = new System.Windows.Forms.ComboBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.checkBoxLeft = new System.Windows.Forms.CheckBox();
+            this.checkBoxRight = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox_Position
@@ -68,8 +76,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.выбратьФайлToolStripMenuItem,
-            this.открытьПапкуToolStripMenuItem,
-            this.настройкиToolStripMenuItem});
+            this.настройкиToolStripMenuItem,
+            this.открытьОтчетыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -79,21 +87,23 @@
             // выбратьФайлToolStripMenuItem
             // 
             this.выбратьФайлToolStripMenuItem.Name = "выбратьФайлToolStripMenuItem";
-            this.выбратьФайлToolStripMenuItem.Size = new System.Drawing.Size(98, 20);
-            this.выбратьФайлToolStripMenuItem.Text = "Выбрать файл";
-            this.выбратьФайлToolStripMenuItem.Click += new System.EventHandler(this.выбратьФайлToolStripMenuItem_Click);
-            // 
-            // открытьПапкуToolStripMenuItem
-            // 
-            this.открытьПапкуToolStripMenuItem.Name = "открытьПапкуToolStripMenuItem";
-            this.открытьПапкуToolStripMenuItem.Size = new System.Drawing.Size(101, 20);
-            this.открытьПапкуToolStripMenuItem.Text = "Открыть папку";
+            this.выбратьФайлToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.выбратьФайлToolStripMenuItem.Text = "Открыть...";
+            this.выбратьФайлToolStripMenuItem.Click += new System.EventHandler(this.OpenFiles);
             // 
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             this.настройкиToolStripMenuItem.Text = "Настройки";
+            this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
+            // 
+            // открытьОтчетыToolStripMenuItem
+            // 
+            this.открытьОтчетыToolStripMenuItem.Name = "открытьОтчетыToolStripMenuItem";
+            this.открытьОтчетыToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.открытьОтчетыToolStripMenuItem.Text = "Отчеты";
+            this.открытьОтчетыToolStripMenuItem.Click += new System.EventHandler(this.открытьОтчетыToolStripMenuItem_Click);
             // 
             // openFileDialog
             // 
@@ -117,7 +127,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 162);
+            this.label2.Location = new System.Drawing.Point(12, 162);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 15);
             this.label2.TabIndex = 3;
@@ -129,6 +139,7 @@
             this.textBoxLContext.Name = "textBoxLContext";
             this.textBoxLContext.Size = new System.Drawing.Size(100, 23);
             this.textBoxLContext.TabIndex = 5;
+            this.textBoxLContext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // textBoxRContext
             // 
@@ -173,13 +184,71 @@
             this.comboBoxWrong.Name = "comboBoxWrong";
             this.comboBoxWrong.Size = new System.Drawing.Size(34, 23);
             this.comboBoxWrong.TabIndex = 11;
-            this.comboBoxWrong.SelectedIndexChanged += new System.EventHandler(this.comboBoxMain_SelectedIndexChanged);
+            this.comboBoxWrong.SelectedIndexChanged += new System.EventHandler(this.comboBoxWrong_SelectedIndexChanged);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripProgressBar});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.TabIndex = 12;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(48, 17);
+            this.toolStripStatusLabel1.Text = "Прцесс";
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(130, 16);
+            // 
+            // checkBoxLeft
+            // 
+            this.checkBoxLeft.AutoSize = true;
+            this.checkBoxLeft.Location = new System.Drawing.Point(15, 247);
+            this.checkBoxLeft.Name = "checkBoxLeft";
+            this.checkBoxLeft.Size = new System.Drawing.Size(173, 19);
+            this.checkBoxLeft.TabIndex = 13;
+            this.checkBoxLeft.Text = "Учитывать левый контекст";
+            this.checkBoxLeft.UseVisualStyleBackColor = true;
+            this.checkBoxLeft.CheckedChanged += new System.EventHandler(this.checkBoxLeft_CheckedChanged);
+            // 
+            // checkBoxRight
+            // 
+            this.checkBoxRight.AutoSize = true;
+            this.checkBoxRight.Location = new System.Drawing.Point(15, 272);
+            this.checkBoxRight.Name = "checkBoxRight";
+            this.checkBoxRight.Size = new System.Drawing.Size(180, 19);
+            this.checkBoxRight.TabIndex = 14;
+            this.checkBoxRight.Text = "Учитывать правый контекст";
+            this.checkBoxRight.UseVisualStyleBackColor = true;
+            this.checkBoxRight.CheckedChanged += new System.EventHandler(this.checkBoxRight_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(156, 162);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(102, 15);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Правый контекст";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.checkBoxRight);
+            this.Controls.Add(this.checkBoxLeft);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.comboBoxWrong);
             this.Controls.Add(this.comboBoxMain);
             this.Controls.Add(this.richTextBox1);
@@ -188,6 +257,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.label2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Главное";
@@ -195,6 +265,8 @@
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,7 +286,15 @@
         private RichTextBox richTextBox1;
         private ComboBox comboBoxMain;
         private ComboBox comboBoxWrong;
-        private ToolStripMenuItem открытьПапкуToolStripMenuItem;
         private ToolStripMenuItem настройкиToolStripMenuItem;
+        private ToolStripMenuItem открытьОтчетыToolStripMenuItem;
+        private ToolStripMenuItem открытьОдинToolStripMenuItem;
+        private ToolStripMenuItem открытьГруппуToolStripMenuItem;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripProgressBar toolStripProgressBar;
+        private CheckBox checkBoxLeft;
+        private CheckBox checkBoxRight;
+        private Label label3;
     }
 }

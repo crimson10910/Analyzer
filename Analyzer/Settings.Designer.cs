@@ -142,5 +142,17 @@ namespace Analyzer {
                 this["bigFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0.2")]
+        public string virsion {
+            get {
+                return ((string)(this["virsion"]));
+            }
+            set {
+                this["virsion"] = value;
+            }
+        }
     }
 }

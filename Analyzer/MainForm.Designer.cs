@@ -40,7 +40,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxLContext = new System.Windows.Forms.TextBox();
             this.textBoxRContext = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.comboBoxMain = new System.Windows.Forms.ComboBox();
             this.comboBoxWrong = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -56,7 +55,7 @@
             // 
             // textBox_Position
             // 
-            this.textBox_Position.Location = new System.Drawing.Point(103, 3);
+            this.textBox_Position.Location = new System.Drawing.Point(124, 3);
             this.textBox_Position.Name = "textBox_Position";
             this.textBox_Position.Size = new System.Drawing.Size(94, 23);
             this.textBox_Position.TabIndex = 1;
@@ -65,8 +64,9 @@
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(63, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 15);
             this.label1.TabIndex = 2;
@@ -80,7 +80,7 @@
             this.открытьОтчетыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(267, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip";
             // 
@@ -121,7 +121,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(243, 100);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // label2
@@ -140,6 +140,7 @@
             this.textBoxLContext.Size = new System.Drawing.Size(100, 23);
             this.textBoxLContext.TabIndex = 5;
             this.textBoxLContext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBoxLContext.TextChanged += new System.EventHandler(this.textBoxLContext_TextChanged);
             // 
             // textBoxRContext
             // 
@@ -147,14 +148,7 @@
             this.textBoxRContext.Name = "textBoxRContext";
             this.textBoxRContext.Size = new System.Drawing.Size(100, 23);
             this.textBoxRContext.TabIndex = 7;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(272, 27);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(516, 396);
-            this.richTextBox1.TabIndex = 9;
-            this.richTextBox1.Text = "";
+            this.textBoxRContext.TextChanged += new System.EventHandler(this.textBoxRContext_TextChanged);
             // 
             // comboBoxMain
             // 
@@ -191,10 +185,10 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripProgressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 297);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(267, 22);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -212,6 +206,7 @@
             // checkBoxLeft
             // 
             this.checkBoxLeft.AutoSize = true;
+            this.checkBoxLeft.Enabled = false;
             this.checkBoxLeft.Location = new System.Drawing.Point(15, 247);
             this.checkBoxLeft.Name = "checkBoxLeft";
             this.checkBoxLeft.Size = new System.Drawing.Size(173, 19);
@@ -223,6 +218,7 @@
             // checkBoxRight
             // 
             this.checkBoxRight.AutoSize = true;
+            this.checkBoxRight.Enabled = false;
             this.checkBoxRight.Location = new System.Drawing.Point(15, 272);
             this.checkBoxRight.Name = "checkBoxRight";
             this.checkBoxRight.Size = new System.Drawing.Size(180, 19);
@@ -244,14 +240,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(267, 319);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.checkBoxRight);
             this.Controls.Add(this.checkBoxLeft);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.comboBoxWrong);
             this.Controls.Add(this.comboBoxMain);
-            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.textBoxRContext);
             this.Controls.Add(this.textBoxLContext);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -259,6 +254,9 @@
             this.Controls.Add(this.label2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(283, 358);
+            this.MinimumSize = new System.Drawing.Size(283, 358);
             this.Name = "MainForm";
             this.Text = "Главное";
             this.menuStrip1.ResumeLayout(false);
@@ -283,7 +281,6 @@
         private Label label2;
         private TextBox textBoxLContext;
         private TextBox textBoxRContext;
-        private RichTextBox richTextBox1;
         private ComboBox comboBoxMain;
         private ComboBox comboBoxWrong;
         private ToolStripMenuItem настройкиToolStripMenuItem;

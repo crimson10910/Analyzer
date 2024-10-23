@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.textBox_Position = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.выбратьФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,36 +36,38 @@
             this.открытьОтчетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.numericUpDownPosition = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxWriteLogs = new System.Windows.Forms.CheckBox();
+            this.numericUpDownLeft = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxLContext = new System.Windows.Forms.TextBox();
-            this.textBoxRContext = new System.Windows.Forms.TextBox();
-            this.comboBoxMain = new System.Windows.Forms.ComboBox();
             this.comboBoxWrong = new System.Windows.Forms.ComboBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.checkBoxLeft = new System.Windows.Forms.CheckBox();
-            this.checkBoxRight = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBoxMain = new System.Windows.Forms.ComboBox();
+            this.comboBoxSplitter = new System.Windows.Forms.ComboBox();
+            this.numericUpDownRight = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rich = new System.Windows.Forms.GroupBox();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPosition)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRight)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.rich.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // textBox_Position
-            // 
-            this.textBox_Position.Location = new System.Drawing.Point(124, 3);
-            this.textBox_Position.Name = "textBox_Position";
-            this.textBox_Position.Size = new System.Drawing.Size(94, 23);
-            this.textBox_Position.TabIndex = 1;
-            this.textBox_Position.Text = "112";
-            this.textBox_Position.TextChanged += new System.EventHandler(this.textBox_Position_TextChanged);
             // 
             // label1
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(63, 6);
+            this.label1.Location = new System.Drawing.Point(128, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 15);
             this.label1.TabIndex = 2;
@@ -80,7 +81,7 @@
             this.открытьОтчетыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(267, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(530, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip";
             // 
@@ -111,59 +112,85 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.textBox_Position, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 36);
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.18906F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.81094F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 244F));
+            this.tableLayoutPanel1.Controls.Add(this.numericUpDownPosition, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxWriteLogs, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.numericUpDownLeft, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxWrong, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxMain, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxSplitter, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.numericUpDownRight, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 2, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 187);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(243, 100);
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(437, 155);
             this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // numericUpDownPosition
+            // 
+            this.numericUpDownPosition.Location = new System.Drawing.Point(123, 18);
+            this.numericUpDownPosition.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.numericUpDownPosition.Name = "numericUpDownPosition";
+            this.numericUpDownPosition.Size = new System.Drawing.Size(66, 23);
+            this.numericUpDownPosition.TabIndex = 19;
+            this.numericUpDownPosition.ValueChanged += new System.EventHandler(this.numericUpDownPosition_ValueChanged);
+            // 
+            // checkBoxWriteLogs
+            // 
+            this.checkBoxWriteLogs.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.checkBoxWriteLogs.AutoSize = true;
+            this.checkBoxWriteLogs.Location = new System.Drawing.Point(31, 134);
+            this.checkBoxWriteLogs.Name = "checkBoxWriteLogs";
+            this.checkBoxWriteLogs.Size = new System.Drawing.Size(86, 19);
+            this.checkBoxWriteLogs.TabIndex = 16;
+            this.checkBoxWriteLogs.Text = "Вести логи";
+            this.checkBoxWriteLogs.UseVisualStyleBackColor = true;
+            this.checkBoxWriteLogs.CheckedChanged += new System.EventHandler(this.checkBoxWriteLogs_CheckedChanged);
+            // 
+            // numericUpDownLeft
+            // 
+            this.numericUpDownLeft.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.numericUpDownLeft.Location = new System.Drawing.Point(123, 47);
+            this.numericUpDownLeft.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownLeft.Name = "numericUpDownLeft";
+            this.numericUpDownLeft.ReadOnly = true;
+            this.numericUpDownLeft.Size = new System.Drawing.Size(66, 23);
+            this.numericUpDownLeft.TabIndex = 16;
+            this.numericUpDownLeft.ValueChanged += new System.EventHandler(this.numericUpDownLeft_ValueChanged);
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 162);
+            this.label2.Location = new System.Drawing.Point(23, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 15);
             this.label2.TabIndex = 3;
             this.label2.Text = "Левый контекст";
-            // 
-            // textBoxLContext
-            // 
-            this.textBoxLContext.Location = new System.Drawing.Point(12, 180);
-            this.textBoxLContext.Name = "textBoxLContext";
-            this.textBoxLContext.Size = new System.Drawing.Size(100, 23);
-            this.textBoxLContext.TabIndex = 5;
-            this.textBoxLContext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.textBoxLContext.TextChanged += new System.EventHandler(this.textBoxLContext_TextChanged);
-            // 
-            // textBoxRContext
-            // 
-            this.textBoxRContext.Location = new System.Drawing.Point(158, 180);
-            this.textBoxRContext.Name = "textBoxRContext";
-            this.textBoxRContext.Size = new System.Drawing.Size(100, 23);
-            this.textBoxRContext.TabIndex = 7;
-            this.textBoxRContext.TextChanged += new System.EventHandler(this.textBoxRContext_TextChanged);
-            // 
-            // comboBoxMain
-            // 
-            this.comboBoxMain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxMain.FormattingEnabled = true;
-            this.comboBoxMain.Items.AddRange(new object[] {
-            "C",
-            "T",
-            "A",
-            "G"});
-            this.comboBoxMain.Location = new System.Drawing.Point(118, 180);
-            this.comboBoxMain.Name = "comboBoxMain";
-            this.comboBoxMain.Size = new System.Drawing.Size(34, 23);
-            this.comboBoxMain.TabIndex = 10;
-            this.comboBoxMain.SelectedIndexChanged += new System.EventHandler(this.comboBoxMain_SelectedIndexChanged);
             // 
             // comboBoxWrong
             // 
@@ -174,124 +201,206 @@
             "T",
             "A",
             "G"});
-            this.comboBoxWrong.Location = new System.Drawing.Point(118, 209);
+            this.comboBoxWrong.Location = new System.Drawing.Point(195, 18);
             this.comboBoxWrong.Name = "comboBoxWrong";
             this.comboBoxWrong.Size = new System.Drawing.Size(34, 23);
             this.comboBoxWrong.TabIndex = 11;
             this.comboBoxWrong.SelectedIndexChanged += new System.EventHandler(this.comboBoxWrong_SelectedIndexChanged);
             // 
-            // statusStrip1
+            // label4
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripProgressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 297);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(267, 22);
-            this.statusStrip1.TabIndex = 12;
-            this.statusStrip1.Text = "statusStrip1";
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(42, 109);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(75, 15);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Разделитель";
             // 
-            // toolStripStatusLabel1
+            // comboBoxMain
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(48, 17);
-            this.toolStripStatusLabel1.Text = "Прцесс";
+            this.comboBoxMain.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.comboBoxMain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMain.FormattingEnabled = true;
+            this.comboBoxMain.Items.AddRange(new object[] {
+            "C",
+            "T",
+            "A",
+            "G"});
+            this.comboBoxMain.Location = new System.Drawing.Point(83, 18);
+            this.comboBoxMain.Name = "comboBoxMain";
+            this.comboBoxMain.Size = new System.Drawing.Size(34, 23);
+            this.comboBoxMain.TabIndex = 10;
+            this.comboBoxMain.SelectedIndexChanged += new System.EventHandler(this.comboBoxMain_SelectedIndexChanged);
             // 
-            // toolStripProgressBar
+            // comboBoxSplitter
             // 
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(130, 16);
+            this.comboBoxSplitter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSplitter.FormattingEnabled = true;
+            this.comboBoxSplitter.Items.AddRange(new object[] {
+            ",",
+            ";"});
+            this.comboBoxSplitter.Location = new System.Drawing.Point(123, 105);
+            this.comboBoxSplitter.Name = "comboBoxSplitter";
+            this.comboBoxSplitter.Size = new System.Drawing.Size(34, 23);
+            this.comboBoxSplitter.TabIndex = 12;
+            this.comboBoxSplitter.SelectedIndexChanged += new System.EventHandler(this.comboBoxSplitter_SelectedIndexChanged);
             // 
-            // checkBoxLeft
+            // numericUpDownRight
             // 
-            this.checkBoxLeft.AutoSize = true;
-            this.checkBoxLeft.Enabled = false;
-            this.checkBoxLeft.Location = new System.Drawing.Point(15, 247);
-            this.checkBoxLeft.Name = "checkBoxLeft";
-            this.checkBoxLeft.Size = new System.Drawing.Size(173, 19);
-            this.checkBoxLeft.TabIndex = 13;
-            this.checkBoxLeft.Text = "Учитывать левый контекст";
-            this.checkBoxLeft.UseVisualStyleBackColor = true;
-            this.checkBoxLeft.CheckedChanged += new System.EventHandler(this.checkBoxLeft_CheckedChanged);
-            // 
-            // checkBoxRight
-            // 
-            this.checkBoxRight.AutoSize = true;
-            this.checkBoxRight.Enabled = false;
-            this.checkBoxRight.Location = new System.Drawing.Point(15, 272);
-            this.checkBoxRight.Name = "checkBoxRight";
-            this.checkBoxRight.Size = new System.Drawing.Size(180, 19);
-            this.checkBoxRight.TabIndex = 14;
-            this.checkBoxRight.Text = "Учитывать правый контекст";
-            this.checkBoxRight.UseVisualStyleBackColor = true;
-            this.checkBoxRight.CheckedChanged += new System.EventHandler(this.checkBoxRight_CheckedChanged);
+            this.numericUpDownRight.Location = new System.Drawing.Point(123, 76);
+            this.numericUpDownRight.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownRight.Name = "numericUpDownRight";
+            this.numericUpDownRight.ReadOnly = true;
+            this.numericUpDownRight.Size = new System.Drawing.Size(66, 23);
+            this.numericUpDownRight.TabIndex = 17;
+            this.numericUpDownRight.ValueChanged += new System.EventHandler(this.numericUpDownRight_ValueChanged);
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(156, 162);
+            this.label3.Location = new System.Drawing.Point(15, 80);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(102, 15);
             this.label3.TabIndex = 15;
             this.label3.Text = "Правый контекст";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(195, 102);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(10, 15);
+            this.label5.TabIndex = 18;
+            this.label5.Text = ".";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(72, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(45, 15);
+            this.label6.TabIndex = 19;
+            this.label6.Text = "Норма";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(195, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(55, 15);
+            this.label7.TabIndex = 20;
+            this.label7.Text = "Мутация";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.AutoSize = false;
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripProgressBar});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 342);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(530, 22);
+            this.statusStrip1.TabIndex = 12;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(130, 16);
+            this.toolStripProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 19);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.richTextBox1.Size = new System.Drawing.Size(524, 135);
+            this.richTextBox1.TabIndex = 17;
+            this.richTextBox1.Text = "";
+            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // rich
+            // 
+            this.rich.Controls.Add(this.richTextBox1);
+            this.rich.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rich.Location = new System.Drawing.Point(0, 24);
+            this.rich.Name = "rich";
+            this.rich.Size = new System.Drawing.Size(530, 157);
+            this.rich.TabIndex = 18;
+            this.rich.TabStop = false;
+            this.rich.Text = "Эталонный ампликон";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.AutoSize = false;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(60, 17);
+            this.toolStripStatusLabel1.Text = "Прогресс";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 319);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.checkBoxRight);
-            this.Controls.Add(this.checkBoxLeft);
+            this.ClientSize = new System.Drawing.Size(530, 364);
+            this.Controls.Add(this.rich);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.comboBoxWrong);
-            this.Controls.Add(this.comboBoxMain);
-            this.Controls.Add(this.textBoxRContext);
-            this.Controls.Add(this.textBoxLContext);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.label2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(283, 358);
-            this.MinimumSize = new System.Drawing.Size(283, 358);
+            this.MinimumSize = new System.Drawing.Size(0, 358);
             this.Name = "MainForm";
             this.Text = "Главное";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPosition)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLeft)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRight)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.rich.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private TextBox textBox_Position;
         private Label label1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem выбратьФайлToolStripMenuItem;
         private OpenFileDialog openFileDialog;
         private TableLayoutPanel tableLayoutPanel1;
         private Label label2;
-        private TextBox textBoxLContext;
-        private TextBox textBoxRContext;
         private ComboBox comboBoxMain;
         private ComboBox comboBoxWrong;
         private ToolStripMenuItem настройкиToolStripMenuItem;
         private ToolStripMenuItem открытьОтчетыToolStripMenuItem;
-        private ToolStripMenuItem открытьОдинToolStripMenuItem;
-        private ToolStripMenuItem открытьГруппуToolStripMenuItem;
         private StatusStrip statusStrip1;
-        private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripProgressBar toolStripProgressBar;
-        private CheckBox checkBoxLeft;
-        private CheckBox checkBoxRight;
         private Label label3;
+        private ComboBox comboBoxSplitter;
+        private Label label4;
+        private CheckBox checkBoxWriteLogs;
+        private RichTextBox richTextBox1;
+        private GroupBox rich;
+        private NumericUpDown numericUpDownLeft;
+        private NumericUpDown numericUpDownRight;
+        private Label label5;
+        private Label label6;
+        private Label label7;
+        private NumericUpDown numericUpDownPosition;
+        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }

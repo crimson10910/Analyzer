@@ -73,10 +73,10 @@ namespace Analyzer {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string position {
+        [global::System.Configuration.DefaultSettingValueAttribute("112")]
+        public int position {
             get {
-                return ((string)(this["position"]));
+                return ((int)(this["position"]));
             }
             set {
                 this["position"] = value;
@@ -152,6 +152,78 @@ namespace Analyzer {
             }
             set {
                 this["virsion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string csvSplitter {
+            get {
+                return ((string)(this["csvSplitter"]));
+            }
+            set {
+                this["csvSplitter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int splitetrIndex {
+            get {
+                return ((int)(this["splitetrIndex"]));
+            }
+            set {
+                this["splitetrIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool writeLogs {
+            get {
+                return ((bool)(this["writeLogs"]));
+            }
+            set {
+                this["writeLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string bigText {
+            get {
+                return ((string)(this["bigText"]));
+            }
+            set {
+                this["bigText"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int shiftLeft {
+            get {
+                return ((int)(this["shiftLeft"]));
+            }
+            set {
+                this["shiftLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int shiftRight {
+            get {
+                return ((int)(this["shiftRight"]));
+            }
+            set {
+                this["shiftRight"] = value;
             }
         }
     }

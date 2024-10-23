@@ -14,8 +14,8 @@
     <Setting Name="extractionPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">export\</Value>
     </Setting>
-    <Setting Name="position" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="position" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">112</Value>
     </Setting>
     <Setting Name="leftContext" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -34,6 +34,24 @@
     </Setting>
     <Setting Name="virsion" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.0.2</Value>
+    </Setting>
+    <Setting Name="csvSplitter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="splitetrIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="writeLogs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="bigText" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="shiftLeft" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="shiftRight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

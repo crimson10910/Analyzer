@@ -51,6 +51,7 @@ namespace Analyzer
         int shiftR = 0;
         int shiftL = 0;
 
+
         float aCount = 0, tCount = 0, gCount = 0, cCount = 0;
         float aCountRev = 0, tCountRev = 0, gCountRev = 0, cCountRev = 0;
 

@@ -11,21 +11,16 @@ namespace Analyzer
 
             comboBoxMain.SelectedIndex = Settings.Default.selectedMain;
             comboBoxWrong.SelectedIndex = Settings.Default.selectedWrong;
-
-            //checkBoxRight.Checked = Settings.Default.checkRight;
-            //checkBoxLeft.Checked = Settings.Default.checkLeft;
             checkBoxWriteLogs.Checked = Settings.Default.writeLogs;
-
-            //textBoxLContext.Text = Settings.Default.leftContext;
-            //textBoxRContext.Text = Settings.Default.rightContext;
-
+            checkBoxPairedEnd.Checked = Settings.Default.pairedEnd;
             comboBoxSplitter.SelectedIndex = Settings.Default.splitetrIndex;
             richTextBox1.Text = Settings.Default.bigText;
-
             numericUpDownLeft.Value = Settings.Default.shiftLeft;
             numericUpDownRight.Value = Settings.Default.shiftRight;
             position = Settings.Default.position;
             numericUpDownPosition.Value = Settings.Default.position;
+
+
 
         }
         string leftContext;
@@ -75,11 +70,82 @@ namespace Analyzer
         bool isBigFileCreated = false;
         bool toOneFile = true;
         bool newLog = true;
+        bool newLogSeq = true;
+        bool pairedEndSeq = false;
 
         public const string FILENAME = "";
         private string logName = "";
         public string splitter = "";
         private bool writeLogs;
+
+        Dictionary<int, char> sequenceR1 = new Dictionary<int, char>();
+        Dictionary<int, char> sequenceR2 = new Dictionary<int, char>();
+        Dictionary<int, char> sequenceResult = new Dictionary<int, char>();
+        Dictionary<int, string> allReadsR1 = new Dictionary<int, string>();
+        Dictionary<int, string> allReadsR2 = new Dictionary<int, string>();
+
+        private void PairedEndSequence()
+        {
+
+            foreach (var r1 in sequenceR1)
+            {
+                foreach (var r2 in sequenceR2)
+                {
+                    if (r1.Value == r2.Value && r1.Key == r2.Key)
+                    {
+                        sequenceResult.Add(r1.Key, r1.Value);
+                        continue;
+                    }
+                    if (r1.Value != r2.Value && r1.Key == r2.Key)
+                    {
+                        sequenceResult.Add(r1.Key, 'E');
+                        continue;
+                    }
+                }
+            }
+            return;
+        }
+        private string GetCountOfSequencesToString()
+        {
+            int a = 0;
+            int t = 0;
+            int g = 0;
+            int c = 0;
+            int e = 0;
+            string count = "";
+            foreach (var item in sequenceResult)
+            {
+                if (item.Value == 'A')
+                {
+                    a++;
+                    continue;
+                }
+                if (item.Value == 'T')
+                {
+                    t++;
+                    continue;
+                }
+                if (item.Value == 'G')
+                {
+                    g++;
+                    continue;
+                }
+                if (item.Value == 'C')
+                {
+                    c++;
+                    continue;
+                }
+                if (item.Value == 'E')
+                {
+                    e++;
+                    continue;
+                }
+            }
+            count = a.ToString() + splitter + t.ToString() + splitter +  g.ToString() + splitter 
+                + c.ToString() + splitter + e.ToString() + splitter;
+
+            return count;
+        }
 
         private void ProcessGenomeFile(string[] fileText, string fileName = "")
         {
@@ -87,6 +153,7 @@ namespace Analyzer
             {
                 return;
             }
+            bool R1 = false;
             char main = ' ', wrong = ' ';
             string context = "";
             bool read = false;
@@ -95,6 +162,7 @@ namespace Analyzer
             int a = 0, t = 0, g = 0, c = 0, ers = 0, dgs = 0;
             if (fileName.Contains("R1"))
             {
+                R1 = true;
                 main = mainChar;
                 wrong = wrongChar;
                 cA = contextA;
@@ -132,10 +200,27 @@ namespace Analyzer
                 }
                 if (read)
                 {
-
+                    if (pairedEndSeq && R1)
+                    {
+                        allReadsR1.Add(i, fileText[i]);
+                    }
+                    if (pairedEndSeq && !R1)
+                    {
+                        allReadsR2.Add(i, fileText[i]);
+                    }
                     if (fileText[i].Contains(cA))
                     {
-                        CheckForLog(fileName, fileText[i], i, main, wrong, Leters[0]);
+                        if (R1 && pairedEndSeq)
+                        {
+                            sequenceR1.Add(i, 'A');
+                        }
+                        if (!R1 && pairedEndSeq)
+                        {
+                            sequenceR2.Add(i, 'A');
+                        }
+                        
+                        //PairedEndSequence();
+                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[0]);
                         //aCount++;
                         a++;
                         read = false;
@@ -143,7 +228,16 @@ namespace Analyzer
                     }
                     if (fileText[i].Contains(cT))
                     {
-                        CheckForLog(fileName, fileText[i], i, main, wrong, Leters[3]);
+                        if (R1 && pairedEndSeq)
+                        {
+                            sequenceR1.Add(i, 'T');
+                        }
+                        if (!R1 && pairedEndSeq)
+                        {
+                            sequenceR2.Add(i, 'T');
+                        }
+                        //PairedEndSequence();
+                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[3]);
                         //tCount++;
                         t++;
                         read = false;
@@ -151,7 +245,16 @@ namespace Analyzer
                     }
                     if (fileText[i].Contains(cG))
                     {
-                        CheckForLog(fileName, fileText[i], i, main, wrong, Leters[1]);
+                        if (R1 && pairedEndSeq)
+                        {
+                            sequenceR1.Add(i, 'G');
+                        }
+                        if (!R1 && pairedEndSeq)
+                        {
+                            sequenceR2.Add(i, 'G');
+                        }
+                        //PairedEndSequence();
+                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[1]);
                         //gCount++;
                         g++;
                         read = false;
@@ -159,7 +262,16 @@ namespace Analyzer
                     }
                     if (fileText[i].Contains(cC))
                     {
-                        CheckForLog(fileName, fileText[i], i, main, wrong, Leters[2]);
+                        if (R1 && pairedEndSeq)
+                        {
+                            sequenceR1.Add(i, 'C');
+                        }
+                        if (!R1 && pairedEndSeq)
+                        {
+                            sequenceR2.Add(i, 'C');
+                        }
+                        //PairedEndSequence();
+                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[2]);
                         // cCount++;
                         c++;
                         read = false;
@@ -167,7 +279,16 @@ namespace Analyzer
                     }
                     else
                     {
-                        CheckForLog(fileName, fileText[i], i, main, wrong, error: true);
+                        if (R1 && pairedEndSeq)
+                        {
+                            sequenceR1.Add(i, 'E');
+                        }
+                        if (!R1 && pairedEndSeq)
+                        {
+                            sequenceR2.Add(i, 'E');
+                        }
+                        //PairedEndSequence();
+                        //CheckForLog(fileName, fileText[i], i, main, wrong, error: true);
                         //errors++;
                         ers++;
                         read = false;
@@ -193,13 +314,12 @@ namespace Analyzer
                 errorsRev = ers;
                 dogRev = dgs;
             }
-            if (writeLogs)
-            {
-                WriteToLogEnd(logName, dgs, plus);
-            }
+
+
         }
 
-        private void ProcessGenomeFiles(string[] fileTextR1, string[] fileTextR2, string fileNameR1, string fileNameR2, int countFiles1 = 0)
+        private void ProcessGenomeFiles(string[] fileTextR1, string[] fileTextR2, string fileNameR1, 
+            string fileNameR2, int countFiles1 = 0)
         {
             aCount = 0;
             aCountRev = 0;
@@ -271,32 +391,51 @@ namespace Analyzer
                 default:
                     break;
             }
-            float catgc3 = (float)mutationCounter / ((float)mutationCounter + (float)allMains);
-            int pd = dog - plus;
-            /*
-            MessageBox.Show("Всего записей: " + allLines.ToString()
-                + "\nНайдено " + comboBoxMain.Text + ": " + allMains.ToString()
-                + "\nНайдено " + comboBoxWrong.Text + ": " + mutationCounter.ToString()
-                + "\nОшибок: " + errors.ToString()
-                + "\nC/Все последовательности : " + Convert.ToString(call)
-                + "\nС/Все-ошибки:  " + catgc
-                + "\nС/Все-ошибки2: " + catgc2
-                + "\n-------------------------------------"
-                + "\n Check: " + check
-                + "\n +:     " + plus
-                + "\n @:     " + dog
-                + "\n +-@:   " + pd);
-            */
+
+
+            if (pairedEndSeq)
+            {
+                PairedEndSequence();
+                GetCountOfSequencesToString();
+                if (writeLogs)
+                {
+                    PairedSequenceLog(fileNameR1);
+                }
+            }
+
             this.Enabled = true;
             newLog = true;
+            newLogSeq = true;
             float reads = dog;
-            float errs = reads - allMains;
-            WriteToCsv(fileNameR1, position, aCount, tCount, gCount, cCount, errors, countFiles1, reads, fileNameR2, aCountRev, tCountRev, gCountRev, cCountRev, errorsRev, dogRev);
-            //WriteToCsv(fileName, position, allMains, mutationCounter, errors, other, catgc3, countFiles1);
+            //string resultString = CreateResultString(fileNameR1, );
+
+            WriteToCsv(fileNameR1, position, aCount, tCount, gCount, cCount, errors, countFiles1, reads, 
+                fileNameR2, aCountRev, tCountRev, gCountRev, cCountRev, errorsRev, dogRev);
+
+            sequenceR1.Clear();
+            sequenceR2.Clear();
+            sequenceResult.Clear();
+            allReadsR1.Clear();
+            allReadsR2.Clear();
 
         }
 
-        void CheckForLog(string fileName, string fileText, int i, char cMain, char cWrng, char c = ' ', bool error = false, string ex_massege = "")
+        private string CreateResultString(string fileNameR1 = "", string fileNameR2 = "")
+        {
+            string result = "";
+            if (pairedEndSeq)
+            {
+
+            }
+            if (!pairedEndSeq)
+            {
+
+            }
+            return result;
+        }
+
+        void CheckForLog(string fileName, string fileText, int i, char cMain, char cWrng, char c = ' ', 
+            bool error = false, string ex_massege = "")
         {
             if (!writeLogs)
             {
@@ -480,6 +619,7 @@ namespace Analyzer
                 string tStrRev = Convert.ToString((readsRev == 0 ? 0 : tRev / readsRev * 100)).Replace(",", ".");
                 string gStrRev = Convert.ToString((readsRev == 0 ? 0 : gRev / readsRev * 100)).Replace(",", ".");
                 string cStrRev = Convert.ToString((readsRev == 0 ? 0 : cRev / readsRev * 100)).Replace(",", ".");
+                string desp = Convert.ToString((GetDiscrepancyCount() == 0 ? 0 : GetDiscrepancyCount() / reads)).Replace(",", ".");
                 byte[] buffer = Encoding.UTF8.GetBytes(
                     nameFile.Substring(nameFile.LastIndexOf('\\') + 1) + splitter
                     + reads + splitter
@@ -497,6 +637,8 @@ namespace Analyzer
                     + cStrRev + splitter        //  
                     + gStrRev + splitter        //
                     + resRev + splitter
+                    + GetDiscrepancyCount() + splitter
+                    + desp + splitter
                     + '\n');
                 fstream.Write(buffer, 0, buffer.Length);
             }
@@ -563,14 +705,85 @@ namespace Analyzer
                     fstream.Write(buffer1, 0, buffer1.Length);
                 }
             }
-
+            //PairedSequenceLog(textLine, result, stringLine, extMessege);
             using (FileStream fstream = new FileStream(logName, FileMode.Append))
             {
                 byte[] buffer1 = Encoding.Default.GetBytes(stringLine.ToString() + splitter + result + splitter + textLine + splitter + extMessege + splitter + "\n");
                 fstream.Write(buffer1, 0, buffer1.Length);
             }
         }
-        // Предсоздание файла отчета - создание шапок
+
+        private void PairedSequenceLog(string nameFile, string extMessege = "")
+        {
+            if (!pairedEndSeq)
+            {
+                return;
+            }
+            if (!Directory.Exists("Log"))
+            {
+                Directory.CreateDirectory("Log");
+            }
+            if (newLogSeq)
+            {
+                logName = "Log\\Log_PairedSeq_" + nameFile.Substring(nameFile.LastIndexOf('\\') + 1) + GetDateTime() + ".csv";
+
+                File.Create(logName).Close();
+                using (FileStream fstream = new FileStream(logName, FileMode.Append))
+                {
+                    byte[] buffer1 = Encoding.Default.GetBytes(
+                        "line" + splitter +
+                        "type" + splitter +
+                        "R1" + splitter +
+                        "R2" + splitter +
+                        "discrepancy" + splitter +
+                        "amplicon_R1" + splitter +
+                        "amplicon_R2" + splitter
+                        + "ext_massege" + splitter + "\n"); ;
+                    fstream.Write(buffer1, 0, buffer1.Length);
+                }
+                newLogSeq = false;
+            }
+            using (FileStream fstream = new FileStream(logName, FileMode.Append))
+            {
+                foreach (var item in allReadsR1)
+                {
+                    string buf = sequenceResult[item.Key] == 'E' ? "1" : "0";
+                    string latter = sequenceResult[item.Key] == 'E'? "Error" : sequenceResult[item.Key].ToString();
+                    string result = "";//Convert.ToChar(sequenceResult[item.Key]) == wrongChar ? "Mutation" : "Normal";
+                    if (Convert.ToChar(sequenceResult[item.Key]) == wrongChar)
+                    {
+                        result = "Mutation";
+                    }
+                    if (Convert.ToChar(sequenceResult[item.Key]) == mainChar)
+                    {
+                        result = "Normal";
+                    }
+                    else
+                    {
+                        result = "Other";
+                    }
+                    byte[] buffer1 = Encoding.Default.GetBytes(
+                    item.Key.ToString()                         + splitter +
+                    result + splitter +
+                    sequenceR1[item.Key].ToString()                                      + splitter +
+                    sequenceR2[item.Key].ToString() + splitter +
+                    buf + splitter +
+                    item.Value.ToString()                       + splitter +
+                    Reverse(ReverseContextString(allReadsR2[item.Key].ToString())) + splitter +
+                    extMessege                                  + splitter + 
+                    "\n"); 
+                    fstream.Write(buffer1, 0, buffer1.Length);
+                }
+                
+            }
+            newLogSeq = true;
+        }
+
+        // Предсоздание файла отчета - создание шапок 
+        /// <summary>
+        /// Можно отправить в другой класс
+        /// </summary>
+        /// <param name="fullname"></param>
         private void PreCreateCsv(string fullname)
         {
             string a = "A_freq";
@@ -646,36 +859,56 @@ namespace Analyzer
                     + gR + splitter
                     + cR + splitter
                     + "Invalid_seq, %" + splitter
+                    + "Discrepancy" + splitter
+                    + "Discrepancy, %" + splitter
                     + "\n");
 
                 fstream.Write(buffer1, 0, buffer1.Length);
             }
         }
 
+        private int GetDiscrepancyCount()
+        {
+            int count = 0;
+            foreach (var item in sequenceResult)
+            {
+                if (item.Value =='E')
+                {
+                    count++;
+                    continue;
+                }
+            }
+            return count;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private void открытьОтчетыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("explorer.exe", Settings.Default.extractionPath);
         }
-
-        private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Default.selectedMain = comboBoxMain.SelectedIndex;
             Settings.Default.Save();
 
         }
-
         private void comboBoxWrong_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Default.selectedWrong = comboBoxWrong.SelectedIndex;
             Settings.Default.Save();
         }
-
         private void textBox_Position_TextChanged(object sender, EventArgs e)
         {
             Settings.Default.position = Convert.ToInt32(numericUpDownPosition.Value);
@@ -683,15 +916,19 @@ namespace Analyzer
             Settings.Default.Save();
             TextColorChage();
         }
-
         private void comboBoxSplitter_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.Default.splitetrIndex = comboBoxSplitter.SelectedIndex;
             Settings.Default.csvSplitter = comboBoxSplitter.Text;
-            splitter = comboBoxSplitter.Text;
             Settings.Default.Save();
+            splitter = comboBoxSplitter.Text;
         }
-
+        private void checkBoxPairedEnd_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.pairedEnd = checkBoxPairedEnd.Checked;
+            Settings.Default.Save();
+            pairedEndSeq = checkBoxPairedEnd.Checked;
+        }
         private void checkBoxWriteLogs_CheckedChanged(object sender, EventArgs e)
         {
 
@@ -711,7 +948,6 @@ namespace Analyzer
             Settings.Default.bigText = richTextBox1.Text;
             Settings.Default.Save();
         }
-
         private void numericUpDownLeft_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.shiftLeft = (int)numericUpDownLeft.Value;
@@ -719,7 +955,6 @@ namespace Analyzer
             Settings.Default.Save();
             TextColorChage();
         }
-
         private void numericUpDownRight_ValueChanged(object sender, EventArgs e)
         {
             Settings.Default.shiftRight = (int)numericUpDownRight.Value;
@@ -727,7 +962,6 @@ namespace Analyzer
             Settings.Default.Save();
             TextColorChage();
         }
-
         // Подсветка текста контекста
         private void TextColorChage()
         {
@@ -752,7 +986,6 @@ namespace Analyzer
             richTextBox1.Select(position - 1, 1);
             richTextBox1.SelectionColor = Color.Red;
             richTextBox1.SelectionBackColor = Color.Yellow;
-
         }
     }
 }

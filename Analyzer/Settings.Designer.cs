@@ -226,5 +226,17 @@ namespace Analyzer {
                 this["shiftRight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool pairedEnd {
+            get {
+                return ((bool)(this["pairedEnd"]));
+            }
+            set {
+                this["pairedEnd"] = value;
+            }
+        }
     }
 }

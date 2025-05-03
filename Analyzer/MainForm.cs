@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
+using static Analyzer.SupportMethods.SupportMethods;
 namespace Analyzer
 {
     public partial class MainForm : Form
@@ -505,15 +507,26 @@ namespace Analyzer
             contextCRev = Reverse(ReverseContextString(contextC));
 
             //label5.Text = leftContext + mainChar + rightContext;
-            int progrressCounter = 0;
+            
             int countOfFiles = dlg.FileNames.Count();
             toolStripProgressBar.Maximum = countOfFiles;
 
             // Сортировка списка файлов в алфавитном порядке 
             Array.Sort(dlg.FileNames);
+            
+            FILE(dlg);
 
+            toolStripProgressBar.Value = 0;
+        }
+        int progrressCounter = 0;
+        private async void FILE(OpenFileDialog dlg)
+        {
+            var startTime = DateTime.Now;
             for (int i = 0; i < dlg.FileNames.Length; i++)
             {
+                toolStripProgressBar.Value = i;
+                toolStripProgressBar.ToolTipText = dlg.FileNames.Length.ToString();
+                await Task.Delay(1);
                 string[] fileTextR1 = null;// = System.IO.File.ReadAllLines(dlg.FileNames[i]);
                 string[] fileTextR2 = null; //= System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
                 if (dlg.FileNames[i].Contains("R1"))
@@ -524,14 +537,14 @@ namespace Analyzer
                         if (dlg.FileNames[i + 1].Contains("R1"))
                         {
                             ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], "", dlg.FileNames.Count());
-                            toolStripProgressBar.Value++;
+                            progrressCounter++;
                             continue;
                         }
                         if (dlg.FileNames[i + 1].Contains("R2"))
                         {
                             fileTextR2 = System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
                             ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], dlg.FileNames[i + 1], dlg.FileNames.Count());
-                            toolStripProgressBar.Value += 2;
+                            progrressCounter += 2;
                             i++;
                             continue;
                         }
@@ -548,38 +561,33 @@ namespace Analyzer
                         {
                             fileTextR1 = System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
                             ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i + 1], dlg.FileNames[i], dlg.FileNames.Count());
-                            toolStripProgressBar.Value += 2;
+                            progrressCounter += 2;
                             i++;
                             continue;
                         }
                         if (dlg.FileNames[i + 1].Contains("R2"))
                         {
                             ProcessGenomeFiles(fileTextR1, fileTextR2, "", dlg.FileNames[i], dlg.FileNames.Count());
-                            toolStripProgressBar.Value++;
+                            progrressCounter++;
                             continue;
                         }
                     }
                     ProcessGenomeFiles(fileTextR1, fileTextR2, "", dlg.FileNames[i], dlg.FileNames.Count());
-                    toolStripProgressBar.Value++;
+                    progrressCounter++;
                     continue;
                 }
 
             }
 
-
-            MessageBox.Show(countOfFiles.ToString() + " файл(ов) успешно обработаны!");
-            toolStripProgressBar.Value = 0;
+            var endTime = DateTime.Now;
+            toolStripProgressBar.Value = toolStripProgressBar.Maximum;
+            MessageBox.Show($"{dlg.FileNames.Length} файл(ов) успешно обработаны!\n{endTime - startTime}");
+            toolStripProgressBar.Value = toolStripProgressBar.Minimum;
+            //toolStripProgressBar.Value = 0;
             isBigFileCreated = false;
+
         }
-        private string Reverse(string str)
-        {
-            string buf = "";
-            for (int i = str.Length - 1; i >= 0; i--)
-            {
-                buf += str[i];
-            }
-            return buf;
-        }
+        
 
         private void WriteToCsv(string nameFile = "", int position = 0, float a = 0, float t = 0, float g = 0, float c = 0, float result = 0, int countFiles = 0, float reads = 0,
             string fileName2 = "", float aRev = 0, float tRev = 0, float gRev = 0, float cRev = 0, float resultRev = 0, float readsRev = 0)
@@ -643,41 +651,7 @@ namespace Analyzer
                 fstream.Write(buffer, 0, buffer.Length);
             }
         }
-        private string ReverseContextString(string context)
-        {
-            string result = string.Empty;
-            for (int i = 0; i < context.Length; i++)
-            {
-                if (context[i] == 'A')
-                {
-                    result += 'T';
-                    continue;
-                }
-                if (context[i] == 'T')
-                {
-                    result += 'A';
-                    continue;
-                }
-                if (context[i] == 'G')
-                {
-                    result += 'C';
-                    continue;
-                }
-                if (context[i] == 'C')
-                {
-                    result += 'G';
-                    continue;
-                }
-            }
 
-            return result;
-        }
-
-        private string GetDateTime()    // Получить дату и время созданного файла
-        {
-            return DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year
-                        + "_" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second;
-        }
         private void WriteToLogEnd(string filename, int dog, int plus)  // для отладки - получить количество ридов
         {
             using (FileStream fstream = new FileStream(filename, FileMode.Append))

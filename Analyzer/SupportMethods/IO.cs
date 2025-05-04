@@ -39,7 +39,11 @@ namespace Analyzer.SupportMethods
            )
         {
             bool doBigFile;
-            string path = Settings.Default.extractionPath;
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + Settings.Default.extractionPath))
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + Settings.Default.extractionPath);
+            }
+            string path = Directory.GetCurrentDirectory() +  Settings.Default.extractionPath;
             string name = Settings.Default.bigFile;
             countOfReads = GetDiscrepancyCount(sequenceResult);
             if (!Directory.Exists(path))
@@ -153,7 +157,10 @@ namespace Analyzer.SupportMethods
                 default:
                     break;
             }
-
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + Settings.Default.extractionPath))
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + Settings.Default.extractionPath);
+            }
             File.Create(fullname).Close();
             using (FileStream fstream = new FileStream(fullname, FileMode.Create))
             {
@@ -193,7 +200,11 @@ namespace Analyzer.SupportMethods
         public static bool WriteToOne(int countOfFiles, char mainChar, char wrongChar)
         {
             string name = "";
-            string path = Settings.Default.extractionPath;
+            string path = Directory.GetCurrentDirectory()+  Settings.Default.extractionPath;
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + Settings.Default.extractionPath))
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + Settings.Default.extractionPath);
+            }
             name = GetDateTime()
                 + "_(" + countOfFiles.ToString() + "_files)" + ".csv";
             Settings.Default.bigFile = name;

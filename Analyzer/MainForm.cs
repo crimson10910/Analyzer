@@ -485,7 +485,7 @@ namespace Analyzer
         {
             var startTime = DateTime.Now;
             string name = "";
-            string path = Settings.Default.extractionPath;
+            string path = Directory.GetCurrentDirectory() + Settings.Default.extractionPath;
             int countOfFiles = dlg.FileNames.Count();
             if (toOneFile && !isBigFileCreated)
             {
@@ -673,7 +673,11 @@ namespace Analyzer
 
         private void îòêðûòüÎò÷åòûToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", Settings.Default.extractionPath);
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + Settings.Default.extractionPath))
+            {
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + Settings.Default.extractionPath);
+            }
+            Process.Start("explorer.exe", Directory.GetCurrentDirectory() +  Settings.Default.extractionPath);
         }
         private void comboBoxMain_SelectedIndexChanged(object sender, EventArgs e)
         {

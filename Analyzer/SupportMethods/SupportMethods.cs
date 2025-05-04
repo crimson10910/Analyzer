@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Analyzer.SupportMethods
 {
+
+    /// <summary>
+    /// Переворачивает строку контекста
+    /// </summary>
     public static class SupportMethods
     {
+        /// <summary>
+        /// Простой переворот строки
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static string Reverse(string str)
         {
             string buf = "";
@@ -17,6 +26,11 @@ namespace Analyzer.SupportMethods
             }
             return buf;
         }
+        /// <summary>
+        /// Заменяет строку контекста на обратно-комплементарную
+        /// </summary>
+        /// <param name="context">ATGC</param>
+        /// <returns>TACG</returns>
         public static  string ReverseContextString(string context)
         {
             string result = string.Empty;
@@ -49,6 +63,42 @@ namespace Analyzer.SupportMethods
         {
             return DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year
                         + "_" + DateTime.Now.Hour + "-" + DateTime.Now.Minute + "-" + DateTime.Now.Second;
+        }
+
+        public static int GetDiscrepancyCount(Dictionary<int, char> sequenceResult)
+        {
+            int count = 0;
+            foreach (var item in sequenceResult)
+            {
+                if (item.Value == 'E')
+                {
+                    count++;
+                    continue;
+                }
+            }
+            return count;
+        }
+
+        public static Dictionary<int, char> PairedEndSequence(Dictionary<int, char> sequenceR1, Dictionary<int, char> sequenceR2)
+        {
+            Dictionary<int, char> sequenceResult = new Dictionary<int, char>();
+            foreach (var r1 in sequenceR1)
+            {
+                foreach (var r2 in sequenceR2)
+                {
+                    if (r1.Value == r2.Value && r1.Key == r2.Key)
+                    {
+                        sequenceResult.Add(r1.Key, r1.Value);
+                        continue;
+                    }
+                    if (r1.Value != r2.Value && r1.Key == r2.Key)
+                    {
+                        sequenceResult.Add(r1.Key, 'E');
+                        continue;
+                    }
+                }
+            }
+            return sequenceResult;
         }
     }
 }

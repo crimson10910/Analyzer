@@ -2,6 +2,9 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using static Analyzer.SupportMethods.SupportMethods;
+using static Analyzer.SupportMethods.IO;
+using System.IO;
+using System.Xml.Linq;
 namespace Analyzer
 {
     public partial class MainForm : Form
@@ -47,6 +50,8 @@ namespace Analyzer
         int dogRev = 0;
         int shiftR = 0;
         int shiftL = 0;
+        float shortR1 = 0;
+        float shortR2 = 0;
 
         float aCount = 0, tCount = 0, gCount = 0, cCount = 0;
         float aCountRev = 0, tCountRev = 0, gCountRev = 0, cCountRev = 0;
@@ -86,28 +91,8 @@ namespace Analyzer
         Dictionary<int, string> allReadsR1 = new Dictionary<int, string>();
         Dictionary<int, string> allReadsR2 = new Dictionary<int, string>();
 
-        private void PairedEndSequence()
-        {
-
-            foreach (var r1 in sequenceR1)
-            {
-                foreach (var r2 in sequenceR2)
-                {
-                    if (r1.Value == r2.Value && r1.Key == r2.Key)
-                    {
-                        sequenceResult.Add(r1.Key, r1.Value);
-                        continue;
-                    }
-                    if (r1.Value != r2.Value && r1.Key == r2.Key)
-                    {
-                        sequenceResult.Add(r1.Key, 'E');
-                        continue;
-                    }
-                }
-            }
-            return;
-        }
-        private string GetCountOfSequencesToString()
+        
+        private string GetCountOfSequencesToString(Dictionary<int, char> sequenceResult)
         {
             int a = 0;
             int t = 0;
@@ -149,12 +134,10 @@ namespace Analyzer
             return count;
         }
 
-        private void ProcessGenomeFile(string[] fileText, string fileName = "")
+        private void ProcessGenomeFile(string fileName = "")
         {
-            if (fileText == null)
-            {
-                return;
-            }
+
+            string[] fileText = null;
             bool R1 = false;
             char main = ' ', wrong = ' ';
             string context = "";
@@ -184,6 +167,13 @@ namespace Analyzer
                 Leters = Reverse(Leters);
 
             }
+
+            string[] fileTextR2 = null;
+            fileText = System.IO.File.ReadAllLines(fileName);
+            if (fileText == null)
+            {
+                return;
+            }
             for (int i = 0; i < fileText.Count(); i++)
             {
                 if (fileText[i][0] == '+' && fileText[i].Length == 1)
@@ -198,6 +188,16 @@ namespace Analyzer
                     dgs++;
                     allLines++;
                     read = true;
+                    continue;
+                }
+                if (fileText[i].Length <= position + rightContext.Length)
+                {
+                    if (R1)
+                    {
+                        shortR1++;
+                    }
+                    else { shortR2++; }
+                    read = false;
                     continue;
                 }
                 if (read)
@@ -220,10 +220,6 @@ namespace Analyzer
                         {
                             sequenceR2.Add(i, 'A');
                         }
-                        
-                        //PairedEndSequence();
-                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[0]);
-                        //aCount++;
                         a++;
                         read = false;
                         continue;
@@ -238,9 +234,6 @@ namespace Analyzer
                         {
                             sequenceR2.Add(i, 'T');
                         }
-                        //PairedEndSequence();
-                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[3]);
-                        //tCount++;
                         t++;
                         read = false;
                         continue;
@@ -255,9 +248,6 @@ namespace Analyzer
                         {
                             sequenceR2.Add(i, 'G');
                         }
-                        //PairedEndSequence();
-                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[1]);
-                        //gCount++;
                         g++;
                         read = false;
                         continue;
@@ -272,9 +262,6 @@ namespace Analyzer
                         {
                             sequenceR2.Add(i, 'C');
                         }
-                        //PairedEndSequence();
-                        //CheckForLog(fileName, fileText[i], i, main, wrong, Leters[2]);
-                        // cCount++;
                         c++;
                         read = false;
                         continue;
@@ -289,9 +276,6 @@ namespace Analyzer
                         {
                             sequenceR2.Add(i, 'E');
                         }
-                        //PairedEndSequence();
-                        //CheckForLog(fileName, fileText[i], i, main, wrong, error: true);
-                        //errors++;
                         ers++;
                         read = false;
                         continue;
@@ -320,7 +304,7 @@ namespace Analyzer
 
         }
 
-        private void ProcessGenomeFiles(string[] fileTextR1, string[] fileTextR2, string fileNameR1, 
+        private void ProcessGenomeFiles( string fileNameR1, 
             string fileNameR2, int countFiles1 = 0)
         {
             aCount = 0;
@@ -331,7 +315,8 @@ namespace Analyzer
             gCountRev = 0;
             cCount = 0;
             cCountRev = 0;
-
+            shortR2 = 0;
+            shortR1 = 0;
             allMains = 0;
             mutationCounter = 0;
             mutationCounterRev = 0;
@@ -342,13 +327,13 @@ namespace Analyzer
             plus = 0;
             dog = 0;
             dogRev = 0;
-            if (fileNameR2 != null)
+            if (fileNameR1 != null)
             {
-                ProcessGenomeFile(fileTextR1, fileNameR1);
+                ProcessGenomeFile( fileNameR1);
             }
             if (fileNameR2 != null)
             {
-                ProcessGenomeFile(fileTextR2, fileNameR2);
+                ProcessGenomeFile(fileNameR2);
             }
             // распределяем переменные после результата
             switch (mainChar)
@@ -397,8 +382,8 @@ namespace Analyzer
 
             if (pairedEndSeq)
             {
-                PairedEndSequence();
-                GetCountOfSequencesToString();
+                sequenceResult = PairedEndSequence(sequenceR1, sequenceR2);
+                GetCountOfSequencesToString(sequenceResult);
                 if (writeLogs)
                 {
                     PairedSequenceLog(fileNameR1);
@@ -411,8 +396,8 @@ namespace Analyzer
             float reads = dog;
             //string resultString = CreateResultString(fileNameR1, );
 
-            WriteToCsv(fileNameR1, position, aCount, tCount, gCount, cCount, errors, countFiles1, reads, 
-                fileNameR2, aCountRev, tCountRev, gCountRev, cCountRev, errorsRev, dogRev);
+            WriteToCsv(sequenceResult, toOneFile, isBigFileCreated, fileNameR1, position, aCount, tCount, gCount, cCount, errors, countFiles1, reads, 
+                fileNameR2, aCountRev, tCountRev, gCountRev, cCountRev, errorsRev, dogRev, mainChar, wrongChar, shortR1, shortR2);
 
             sequenceR1.Clear();
             sequenceR2.Clear();
@@ -436,32 +421,6 @@ namespace Analyzer
             return result;
         }
 
-        void CheckForLog(string fileName, string fileText, int i, char cMain, char cWrng, char c = ' ', 
-            bool error = false, string ex_massege = "")
-        {
-            if (!writeLogs)
-            {
-                return;
-            }
-            if (error)
-            {
-                WriteToLog(fileName, fileText, "error", i, ex_massege);
-                newLog = false;
-                return;
-            }
-            if (cMain == c)
-            {
-                WriteToLog(fileName, fileText, "Normal", i, ex_massege);
-                newLog = false;
-                return;
-            }
-            if (cWrng == c)
-            {
-                WriteToLog(fileName, fileText, "Mutation", i, ex_massege);
-                newLog = false;
-                return;
-            }
-        }
         private void OpenFiles(object sender, EventArgs e)   // запись в файл
         {
 
@@ -492,7 +451,6 @@ namespace Analyzer
             // Получение контекста
             leftContext = richTextBox1.Text.Substring(position - shiftL - 1, shiftL).ToUpper();
             rightContext = richTextBox1.Text.Substring(position, shiftR).ToUpper();
-            bool doUppend = false;
 
             //Создание всех вариантов контекста
             contextA = leftContext + "A" + rightContext;
@@ -518,140 +476,94 @@ namespace Analyzer
 
             toolStripProgressBar.Value = 0;
         }
-        int progrressCounter = 0;
+
+        /// <summary>
+        /// Метод обработки всех файлов
+        /// </summary>
+        /// <param name="dlg"></param>
         private async void FILE(OpenFileDialog dlg)
         {
             var startTime = DateTime.Now;
-            for (int i = 0; i < dlg.FileNames.Length; i++)
+            string name = "";
+            string path = Settings.Default.extractionPath;
+            int countOfFiles = dlg.FileNames.Count();
+            if (toOneFile && !isBigFileCreated)
             {
+                isBigFileCreated = WriteToOne(countOfFiles, mainChar, wrongChar);
+            }
+            name = ""; int i = 0;
+            //PreCreateCsv(dlg.FileName, mainChar, wrongChar);
+            for (; i < countOfFiles; i+=2)      // Проход по всем файлам
+            {
+                string fileNameR1 = dlg.FileNames[i];
+                string fileNameR2 = dlg.FileNames[i + 1];
+                
                 toolStripProgressBar.Value = i;
-                toolStripProgressBar.ToolTipText = dlg.FileNames.Length.ToString();
+                toolStripProgressBar.ToolTipText = countOfFiles.ToString();
                 await Task.Delay(1);
-                string[] fileTextR1 = null;// = System.IO.File.ReadAllLines(dlg.FileNames[i]);
-                string[] fileTextR2 = null; //= System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
-                if (dlg.FileNames[i].Contains("R1"))
-                {
-                    fileTextR1 = System.IO.File.ReadAllLines(dlg.FileNames[i]);
-                    if (dlg.FileNames.Count() > i + 1)
-                    {
-                        if (dlg.FileNames[i + 1].Contains("R1"))
-                        {
-                            ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], "", dlg.FileNames.Count());
-                            progrressCounter++;
-                            continue;
-                        }
-                        if (dlg.FileNames[i + 1].Contains("R2"))
-                        {
-                            fileTextR2 = System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
-                            ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], dlg.FileNames[i + 1], dlg.FileNames.Count());
-                            progrressCounter += 2;
-                            i++;
-                            continue;
-                        }
-                    }
-                    ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], "", dlg.FileNames.Count());
-                    continue;
-                }
-                if (dlg.FileNames[i].Contains("R2"))
-                {
-                    fileTextR2 = System.IO.File.ReadAllLines(dlg.FileNames[i]);
-                    if (dlg.FileNames.Count() > i + 1)
-                    {
-                        if (dlg.FileNames[i + 1].Contains("R1"))
-                        {
-                            fileTextR1 = System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
-                            ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i + 1], dlg.FileNames[i], dlg.FileNames.Count());
-                            progrressCounter += 2;
-                            i++;
-                            continue;
-                        }
-                        if (dlg.FileNames[i + 1].Contains("R2"))
-                        {
-                            ProcessGenomeFiles(fileTextR1, fileTextR2, "", dlg.FileNames[i], dlg.FileNames.Count());
-                            progrressCounter++;
-                            continue;
-                        }
-                    }
-                    ProcessGenomeFiles(fileTextR1, fileTextR2, "", dlg.FileNames[i], dlg.FileNames.Count());
-                    progrressCounter++;
-                    continue;
-                }
+                
+                ProcessGenomeFiles(fileNameR1, fileNameR2, countOfFiles);
+                //i++;
+                //if (dlg.FileNames[i].Contains("R1"))
+                //{
+                //    fileTextR1 = System.IO.File.ReadAllLines(dlg.FileNames[i]);     // Чтение всего содержания файла в переменную
+
+                //    if (countOfFiles >= i + 1)
+                //    {
+                //        if (dlg.FileNames[i + 1].Contains("R1"))
+                //        {
+                //            //ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], "", countOfFiles);
+                //            //progrressCounter++;
+                //            continue;
+                //        }
+                //        if (dlg.FileNames[i + 1].Contains("R2"))
+                //        {
+                //            fileTextR2 = System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
+                //            ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], dlg.FileNames[i + 1]   );
+                //            //progrressCounter += 2;
+                //            i++;
+                //            continue;
+                //        }
+                //    }
+                //    ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i], "", countOfFiles);
+                //    continue;
+                //}
+                //if (dlg.FileNames[i].Contains("R2"))
+                //{
+                //    fileTextR2 = System.IO.File.ReadAllLines(dlg.FileNames[i]);
+                //    if (countOfFiles >= i + 1)
+                //    {
+                //        if (dlg.FileNames[i + 1].Contains("R1"))
+                //        {
+                //            fileTextR1 = System.IO.File.ReadAllLines(dlg.FileNames[i + 1]);
+                //            ProcessGenomeFiles(fileTextR1, fileTextR2, dlg.FileNames[i + 1], dlg.FileNames[i], countOfFiles);
+                //            //progrressCounter += 2;
+                //            i++;
+                //            continue;
+                //        }
+                //        if (dlg.FileNames[i + 1].Contains("R2"))
+                //        {
+                //            //ProcessGenomeFiles(fileTextR1, fileTextR2, "", dlg.FileNames[i], countOfFiles);
+                //            // progrressCounter++;
+                //            continue;
+                //        }
+                //    }
+                //    ProcessGenomeFiles(fileTextR1, fileTextR2, "", dlg.FileNames[i], countOfFiles);
+                //    //progrressCounter++;
+                //    continue;
+                //} 
 
             }
 
             var endTime = DateTime.Now;
             toolStripProgressBar.Value = toolStripProgressBar.Maximum;
-            MessageBox.Show($"{dlg.FileNames.Length} файл(ов) успешно обработаны!\n{endTime - startTime}");
+            MessageBox.Show($"{countOfFiles} файл(ов) успешно обработаны!\n{endTime - startTime}");
             toolStripProgressBar.Value = toolStripProgressBar.Minimum;
             //toolStripProgressBar.Value = 0;
             isBigFileCreated = false;
 
         }
         
-
-        private void WriteToCsv(string nameFile = "", int position = 0, float a = 0, float t = 0, float g = 0, float c = 0, float result = 0, int countFiles = 0, float reads = 0,
-            string fileName2 = "", float aRev = 0, float tRev = 0, float gRev = 0, float cRev = 0, float resultRev = 0, float readsRev = 0)
-        {
-
-            string path = Settings.Default.extractionPath;
-            string name = "";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            if (toOneFile)
-            {
-                if (!isBigFileCreated)
-                {
-                    name = GetDateTime()
-                        + "_(" + countFiles.ToString() + "_files)" + ".csv";
-                    Settings.Default.bigFile = name;
-                    PreCreateCsv(path + name);
-                    isBigFileCreated = true;
-                }
-                name = Settings.Default.bigFile;
-            }
-
-            // запись в файл отчета результатов обработки файлов
-            using (FileStream fstream = new FileStream(path + name, FileMode.Append))
-            {
-                string res = Convert.ToString(reads == 0 ? 0 : result / reads * 100).Replace(",", ".");
-                string aStr = Convert.ToString((reads == 0 ? 0 : a / reads * 100)).Replace(",", ".");
-                string tStr = Convert.ToString((reads == 0 ? 0 : t / reads * 100)).Replace(",", ".");
-                string gStr = Convert.ToString((reads == 0 ? 0 : g / reads * 100)).Replace(",", ".");
-                string cStr = Convert.ToString((reads == 0 ? 0 : c / reads * 100)).Replace(",", ".");
-
-                string resRev = Convert.ToString(readsRev == 0 ? 0 : resultRev / readsRev * 100).Replace(",", ".");
-                string aStrRev = Convert.ToString((readsRev == 0 ? 0 : aRev / readsRev * 100)).Replace(",", ".");
-                string tStrRev = Convert.ToString((readsRev == 0 ? 0 : tRev / readsRev * 100)).Replace(",", ".");
-                string gStrRev = Convert.ToString((readsRev == 0 ? 0 : gRev / readsRev * 100)).Replace(",", ".");
-                string cStrRev = Convert.ToString((readsRev == 0 ? 0 : cRev / readsRev * 100)).Replace(",", ".");
-                string desp = Convert.ToString((GetDiscrepancyCount() == 0 ? 0 : GetDiscrepancyCount() / reads)).Replace(",", ".");
-                byte[] buffer = Encoding.UTF8.GetBytes(
-                    nameFile.Substring(nameFile.LastIndexOf('\\') + 1) + splitter
-                    + reads + splitter
-                    + position + splitter
-                    + aStr + splitter
-                    + tStr + splitter
-                    + gStr + splitter
-                    + cStr + splitter
-                    + res + splitter
-                    + fileName2.Substring(fileName2.LastIndexOf('\\') + 1) + splitter
-                    + readsRev + splitter
-                    + position + splitter
-                    + tStrRev + splitter        //
-                    + aStrRev + splitter        //
-                    + cStrRev + splitter        //  
-                    + gStrRev + splitter        //
-                    + resRev + splitter
-                    + GetDiscrepancyCount() + splitter
-                    + desp + splitter
-                    + '\n');
-                fstream.Write(buffer, 0, buffer.Length);
-            }
-        }
-
         private void WriteToLogEnd(string filename, int dog, int plus)  // для отладки - получить количество ридов
         {
             using (FileStream fstream = new FileStream(filename, FileMode.Append))
@@ -758,115 +670,6 @@ namespace Analyzer
         /// Можно отправить в другой класс
         /// </summary>
         /// <param name="fullname"></param>
-        private void PreCreateCsv(string fullname)
-        {
-            string a = "A_freq";
-            string t = "T_freq";
-            string g = "G_freq";
-            string c = "C_freq";
-
-            string aR = "A_freq";
-            string tR = "T_freq";
-            string gR = "G_freq";
-            string cR = "C_freq";
-            switch (mainChar)
-            {
-                case 'A':
-                    a += " (ref)";
-                    aR += " (ref)";
-                    break;
-                case 'T':
-                    t += " (ref)";
-                    tR += " (ref)";
-                    break;
-                case 'G':
-                    g += " (ref)";
-                    gR += " (ref)";
-                    break;
-                case 'C':
-                    c += " (ref)";
-                    cR += " (ref)";
-                    break;
-                default:
-                    break;
-            }
-            switch (wrongChar)
-            {
-                case 'A':
-                    a += " (mut)";
-                    aR += " (mut)";
-                    break;
-                case 'T':
-                    t += " (mut)";
-                    tR += " (mut)";
-                    break;
-                case 'G':
-                    g += " (mut)";
-                    gR += " (mut)";
-                    break;
-                case 'C':
-                    c += " (mut)";
-                    cR += " (mut)";
-                    break;
-                default:
-                    break;
-            }
-
-            File.Create(fullname).Close();
-            using (FileStream fstream = new FileStream(fullname, FileMode.Append))
-            {
-                //byte[] buffer1 = Encoding.Default.GetBytes("Name" + splitter + "Position"+ splitter + "Result(mut/(normal+mut))"+ splitter + "Mutations"+ splitter + "Normal"+ splitter + "Other"+ splitter + "Errors"+ splitter + "\n");
-                byte[] buffer1 = Encoding.Default.GetBytes(
-                    "Name" + splitter
-                    + "Reads" + splitter
-                    + "Position" + splitter
-                    + a + splitter
-                    + t + splitter
-                    + g + splitter
-                    + c + splitter
-                    + "Invalid_seq, %" + splitter
-                    + "Name" + splitter
-                    + "Reads" + splitter
-                    + "Position" + splitter
-                    + aR + splitter
-                    + tR + splitter
-                    + gR + splitter
-                    + cR + splitter
-                    + "Invalid_seq, %" + splitter
-                    + "Discrepancy" + splitter
-                    + "Discrepancy, %" + splitter
-                    + "\n");
-
-                fstream.Write(buffer1, 0, buffer1.Length);
-            }
-        }
-
-        private int GetDiscrepancyCount()
-        {
-            int count = 0;
-            foreach (var item in sequenceResult)
-            {
-                if (item.Value =='E')
-                {
-                    count++;
-                    continue;
-                }
-            }
-            return count;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private void открытьОтчетыToolStripMenuItem_Click(object sender, EventArgs e)
         {

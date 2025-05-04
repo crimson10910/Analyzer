@@ -11,12 +11,12 @@ output:
 Name	Reads	Position	A_freq	T_freq (ref)	G_freq	C_freq (mut)	Invalid_seq, %	Invalid_seq	Short	Short %	Name	Reads	Position	A_freq	T_freq (ref)	G_freq	C_freq (mut)	Invalid_seq, %	Short	Short %	Discrepancy	Discrepancy, %
 ![image](https://github.com/user-attachments/assets/f22f985c-3198-43fc-8790-20b743da8447)
 
-Name - name of R1 file
-Position - position in sequence 
-Invalid_seq - reads with errors
-Short - reads shorter than position + left context
-Name - name of R2
-=//=
+* Name - name of R1 file
+* Position - position in sequence 
+* Invalid_seq - reads with errors
+* Short - reads shorter than position + left context
+* Name - name of R2
+* =//=
 
 Функции: 
 * Построение обратно-комплементарной цепи

@@ -1,4 +1,4 @@
-Functions:
+**Functions**:
 * Construction of the reverse complementary chain
 * Manual selection of context by position in the amplicon.
 * Detection of single nucleotide polymorphisms (SNP).
@@ -18,7 +18,10 @@ Name	Reads	Position	A_freq	T_freq (ref)	G_freq	C_freq (mut)	Invalid_seq, %	Inval
 * Name - name of R2
 * =//=
 
-Функции: 
+**Features of work**:
+**ONLY** paired files of FASTQ format are accepted. In the current release there is no exception handling for an odd number of files (it worked poorly before). Approximate processing time for 1150 files with a total volume of 1 GB is 14 seconds on i5-8600k.
+
+**Функции**: 
 * Построение обратно-комплементарной цепи
 * Ручной выбор контекста по позиции в ампликоне.
 * Детекция однонуклеотидных полиморфизмов (SNP).
